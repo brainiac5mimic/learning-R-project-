@@ -1,2 +1,4 @@
-> source("https://bioconductor.org/biocLite.R")
-> biocLite()
+source("https://bioconductor.org/biocLite.R")
+biocLite()
+biocLite("ShortRead")
+biocLite("parallel")
