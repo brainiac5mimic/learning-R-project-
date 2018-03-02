@@ -22,7 +22,7 @@ head(qaSummary[["baseCalls"]])
 
 #filtering
 	
- 
+ fq
 
  		## trim and filter, e.g., reads cannot contain 'N'...
  		fq <- fq[nFilter()(fq)] # see ?srFilter for pre-defined filters
@@ -31,8 +31,8 @@ head(qaSummary[["baseCalls"]])
 		## than "4" (phred score 20)
  		fq <- trimTailw(fq, 2, "4", 2)
 
- 		## drop reads that are less than 10nt
- 		fq <- fq[width(fq) >= 10]
+ 		## drop reads that are less than 20nt
+ 		fq <- fq[width(fq) >= 20]
 
  		## append to destination
 		file <- "C:/Users/Mark Holton/Documents/R/new.fq"
@@ -43,29 +43,29 @@ head(qaSummary[["baseCalls"]])
  fq
 
 
+
 smp <- FastqStreamer("SP1 - Copy1.fq")
 
-fq1 <- yield(smp)
 ##loop that goes through part of the data at a time.
 
 repeat {
- fq2 <- yield(strm)
- if (length(fq2) == 0)
+ fq1 <- yield(smp)
+ if (length(fq1) == 0)
  break
  ## process chunk
  		## trim and filter, e.g., reads cannot contain 'N'...
- 		fq <- fq[nFilter()(fq)] # see ?srFilter for pre-defined filters
+ 		fq1 <- fq1[nFilter()(fq1)] # see ?srFilter for pre-defined filters
 
 		## trim as soon as 2 of 5 nucleotides has quality encoding less
-		## than "5" (phred score 20)
- 		fq <- trimTailw(fq, 2, "5", 2)
+		## than "4" (phred score 20)
+ 		fq1 <- trimTailw(fq1, 2, "4", 2)
 
  		## drop reads that are less than 20nt
- 		fq <- fq[width(fq) >= 20]
+ 		fq1 <- fq1[width(fq1) >= 20]
 
  		## append to destination
 		file <- "C:/Users/Mark Holton/Documents/R/new1.fq"
- 		writeFastq(fq,file,compress=FALSE)
+ 		writeFastq(fq1,file,compress=FALSE)
 }
 fq1
 
@@ -84,11 +84,11 @@ repeat {
  		fq2 <- fq2[nFilter()(fq2)] # see ?srFilter for pre-defined filters
 
 		## trim as soon as 2 of 5 nucleotides has quality encoding less
-		## than "4" (phred score 20)
- 		fq2 <- trimTailw(fq2, 2, "4", 2)
+		## than "9" (phred score 20)
+ 		fq2 <- trimTailw(fq2, 2, "9", 2)
 
- 		## drop reads that are less than 50nt
- 		fq2 <- fq2[width(fq2) >= 50]
+ 		## drop reads that are less than 20nt
+ 		fq2 <- fq2[width(fq2) >= 20]
 
  		## append to destination
 		file <- "C:/Users/Mark Holton/Documents/R/new2.fq"
