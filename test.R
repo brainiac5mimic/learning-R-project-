@@ -1,7 +1,10 @@
 library("ShortRead")
 
+
+
 sampler <- FastqSampler("SP1.fq")
 fq <- yield(sampler)
+
 head(sread(fq), 5)
 # Quality reads
 encoding(quality(fq))
@@ -28,7 +31,7 @@ head(qaSummary[["baseCalls"]])
 		## than "4" (phred score 20)
  		fq <- trimTailw(fq, 2, "4", 2)
 
- 		## drop reads that are less than 36nt
+ 		## drop reads that are less than 10nt
  		fq <- fq[width(fq) >= 10]
 
  		## append to destination
@@ -39,7 +42,34 @@ head(qaSummary[["baseCalls"]])
 
  fq
 
-strm <- FastqStreamer("SP1.fq")
+
+smp <- FastqStreamer("SP1 - Copy1.fq")
+
+fq1 <- yield(smp)
+##loop that goes through part of the data at a time.
+
+repeat {
+ fq2 <- yield(strm)
+ if (length(fq2) == 0)
+ break
+ ## process chunk
+ 		## trim and filter, e.g., reads cannot contain 'N'...
+ 		fq <- fq[nFilter()(fq)] # see ?srFilter for pre-defined filters
+
+		## trim as soon as 2 of 5 nucleotides has quality encoding less
+		## than "5" (phred score 20)
+ 		fq <- trimTailw(fq, 2, "5", 2)
+
+ 		## drop reads that are less than 20nt
+ 		fq <- fq[width(fq) >= 20]
+
+ 		## append to destination
+		file <- "C:/Users/Mark Holton/Documents/R/new1.fq"
+ 		writeFastq(fq,file,compress=FALSE)
+}
+fq1
+
+strm <- FastqStreamer("SP1 - Copy.fq")
 
 ##loop that goes through part of the data at a time.
 
@@ -57,8 +87,8 @@ repeat {
 		## than "4" (phred score 20)
  		fq2 <- trimTailw(fq2, 2, "4", 2)
 
- 		## drop reads that are less than 36nt
- 		fq2 <- fq2[width(fq2) >= 10]
+ 		## drop reads that are less than 50nt
+ 		fq2 <- fq2[width(fq2) >= 50]
 
  		## append to destination
 		file <- "C:/Users/Mark Holton/Documents/R/new2.fq"
